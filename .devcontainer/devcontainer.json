@@ -1,0 +1,55 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.187.0/containers/azure-terraform
+{
+	"name": "Azure Terraform (Community)",
+	"build": {
+		"dockerfile": "Dockerfile",
+		"args": {
+			"TERRAFORM_VERSION": "1.1.0",
+			"TFLINT_VERSION": "0.24.1",
+			"TERRAGRUNT_VERSION": "0.28.1",
+			"INSTALL_AZURE_CLI": "true",
+			"INSTALL_DOCKER": "false",
+			"INSTALL_NODE": "false"
+		}
+	},
+	"mounts": [
+		"source=/var/run/docker.sock,target=/var/run/docker-host.sock,type=bind"
+	],
+	"overrideCommand": false,
+	"remoteEnv": {
+		"ARM_CLIENT_ID": "${localEnv:STREAMDEV_AZURE_CLIENT_ID}",
+		"ARM_CLIENT_SECRET": "${localEnv:STREAMDEV_AZURE_CLIENT_SECRET}",
+		"ARM_TENANT_ID": "${localEnv:STREAMDEV_AZURE_TENANT_ID}",
+		// Sets environment variables required for terrafom remote backend
+		// Use 'TF_VAR' prefix to set input variables for terraform templates
+		// "TF_VAR_rg_name":  "${containerEnv:TF_VAR_RG_NAME}"
+	},
+	// Set *default* container specific settings.json values on container create.
+	"settings": {
+		"terminal.integrated.defaultProfile.linux": "bash",
+		"terminal.integrated.profiles.linux": {
+			"bash": {
+				"path": "bash"
+			}
+		},
+		"terraform.languageServer": {
+			"enabled": true,
+			"args": []
+		},
+		"azureTerraform.terminal": "integrated"
+	},
+	// Add the IDs of extensions you want installed when the container is created.
+	"extensions": [
+		"hashicorp.terraform",
+		"ms-vscode.azurecli",
+		"ms-azuretools.vscode-azureterraform",
+		"ms-azuretools.vscode-docker"
+	],
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "terraform --version",
+	// Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
+	"remoteUser": "vscode"
+}
